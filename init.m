@@ -1,4 +1,6 @@
 
+%Sistema
+
 Lk = -3;
 N = 100;
 q0 = 1;
@@ -8,12 +10,15 @@ gama = 1;
 c = 1;
 s = zeros(1,N+1);
 k = zeros(1, N);
-p0 = 1;
+p0 = 0;
 x0 = 0;
 R = 1;
 Ts = 0;
 To = 1;
 
+%Ruidos
+q = 0.1;
+r = 0.1;
 
 
 s(N + 1) = q0;
