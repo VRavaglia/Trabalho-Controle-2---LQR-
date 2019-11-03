@@ -11,20 +11,20 @@ G = tf(N, D);
 
 h = 0.01;
 
-Gd = c2d(G, h, 'foh');
+Gd = c2d(G, h, 'zoh');% metodo ZOH de discretizacao
 [num, den] = tfdata(Gd, 'v');
 [phi, gama, Cd, Dd] = tf2ss(num, den);
 
 Q = [1 1; 1 1];
-q0 = 1;
+q0 = eye(length(phi));
 N = 100;
-s = zeros(1,N+1);
-l = zeros(1,N+1);
+s = cell(1,N+1);% troquei os zeros por celulas
+l = cell(1,N+1);
 % Riccati
-s(N + 1) = q0;
-for i = N:-1:1
-    s(i) = phi'*s(i + 1)*phi + Q(1,1) - (phi'*s(i + 1)*gama + Q(1,2))*(gama'*s(i + 1)*gama + Q(2,2))^(-1)*(gama'*s(i + 1)*phi + Q(1,2)');
-    l(i) = (Q(2,2) + gama'*s(i + 1)*gama')^(-1)*(gama'*s(i + 1)*phi - Q(1,2)');
+s{N+1} = q0;
+for k = N:-1:1
+    s{k} = phi'*s{k + 1}*phi + Q(1,1) - (phi'*s{k + 1}*gama + Q(1,2))*(gama'*s{k + 1}*gama + Q(2,2))^(-1)*(gama'*s{k + 1}*phi + Q(2,1));
+    l{k} = (Q(2,2) + gama'*s{k + 1}*gama)^(-1)*(gama'*s{k + 1}*phi - Q(2,1)); % tinha um trasnposto a mais
 end
 
 % Riccati estatico
