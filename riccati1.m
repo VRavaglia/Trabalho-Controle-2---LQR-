@@ -1,7 +1,6 @@
 %% Riccati
 % Inicializando Vetores
 s{N+1} = q0;
-l{N+1} = (Q(2,2) + gama'*s{N + 1}*gama)^(-1)*(gama'*s{N + 1}*phi - Q(2,1));
 
 % S e L pelo Riccati com Loop
 for k = N:-1:1
@@ -10,4 +9,4 @@ for k = N:-1:1
 end
 
 % Riccati estatico
-[H, S, e] = dlqr(phi, gama, Q(1,1), Q(2,2), Q(1,2));
+[H, S, e] = dlqr(phi, gama, Q1, Q2, Q12);
