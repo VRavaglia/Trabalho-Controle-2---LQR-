@@ -19,7 +19,7 @@ Gd = c2d(func_transferencia, h, 'zoh');% metodo ZOH de discretizacao
 
 
 %Inicializando Q, S e L
-Q = [1 1 1; 1 1 1; 1 1 1];
+Q = [1 1 1; 1 1 1; 1 1 1]; % Q agora é 3x3
 q0 = eye(length(phi));
 N = 100;
 s = cell(1,N+1);% troquei os zeros por celulas
