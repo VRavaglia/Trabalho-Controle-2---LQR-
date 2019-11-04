@@ -11,15 +11,15 @@ G = tf(N, D);
 
 h = 0.01;
 
-Gd = c2d(G, h, 'zoh');% metodo ZOH de discretizacao
+Gd = c2d(G, h, 'zoh');
 [num, den] = tfdata(Gd, 'v');
 [phi, gama, Cd, Dd] = tf2ss(num, den);
 
 Q = {1 [-1;-1];[-1 -1] 1};
 q0 = eye(length(phi));
 N = 100;
-s = cell(1,N+1);% troquei os zeros por celulas
-l = cell(1,N+1);
+s = cell(1,N+1);
+l = cell(1,N);
 % Riccati
 s{N+1} = q0;
 for k = N:-1:1
