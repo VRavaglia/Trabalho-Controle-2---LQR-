@@ -1,29 +1,37 @@
+%%Sistema
+syms s real
 
-%Sistema
+%Definindo os polos
+Zeros = 1;
+Polos = [1 3 2];
+func_transferencia = tf(Zeros, Polos);
 
-Lk = -3;
+[A, B, C, D] = tf2ss(Zeros,Polos);
+
+x0 = [1;1];
+
+
+%Discretizando
+% h = 0.01;
+h = 0.01;
+tmax = 100;
+
+Gd = c2d(func_transferencia, h, 'zoh');% metodo ZOH de discretizacao
+[num, den] = tfdata(Gd, 'v');
+[phi, gama, Cd, Dd] = tf2ss(num, den);
+
+
+%Inicializando Q, S e L
+% Q1 = [ 1 1 ; 1 1]
+% Q12 = [ 1 ; 1]
+% Q2 = [1]
+Q1 = [ 1 0 ; 0 1];
+Q12 = [ 0 ; 0];
+Q2 = [1];
+Q = [Q1 Q12 ; Q12' Q2]; % Q agora é 3x3
+q0 = eye(length(phi));
 N = 100;
-q0 = 1;
-Q = [1 1;1 1];
-phi = 1;
-gama = 1;
-c = 1;
-s = zeros(1,N+1);
-k = zeros(1, N);
-p0 = 0;
-x0 = 0;
-R = 1;
-Ts = 0;
-To = 1;
+s = cell(1,N+1);% troquei os zeros por celulas
+l = cell(1,N);
 
-%Ruidos
-q = 0.1;
-r = 0.1;
-
-
-s(N + 1) = q0;
-for i = N:-1:1
-    s(i) = phi*s(i + 1)*phi + Q(1,1) - phi^2*gama^2*s(i + 1)^2/(gama^2*s(i + 1) + Q(2,2));
-    k(i) = phi*gama*s(i + 1)/(Q(2,2) + gama^2*s(i + 1));
-end
-
+riccati1;
