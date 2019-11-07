@@ -1,6 +1,11 @@
 %%Sistema
 syms s real
 
+%Ruidos
+R = 0.01;
+Qn = 0.01;
+G = [1; 1];
+
 %Definindo os polos
 Zeros = 1;
 Polos = [1 3 2];
