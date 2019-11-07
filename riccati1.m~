@@ -15,10 +15,19 @@ end
 %Revertendo a ordem
 sx(:,:) = sx(:,end:-1:1);
 lx(:,:) = lx(:,end:-1:1);
+% Grafico dos S
+aux = size(sx);
+for k = 1:
+plot(sx(:,:)); hold on;
+plot(sx(2,:)); hold on;
+plot(sx(3,:)); hold on;
+plot(sx(4,:)); hold on;
 
+
+lx(1,:) = lx(1,end:-1:1);
+lx(2,:) = lx(2,end:-1:1);
+
+% plot(lx(1,:)); hold on;
+% plot(lx(2,:)); hold on;
 % Riccati estatico
 [H, S, e] = dlqr(phi, gama, Q1, Q2, Q12);
-
-
-
-
