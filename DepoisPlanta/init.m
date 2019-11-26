@@ -45,7 +45,7 @@ B = [1 0]';
 C = g/Aw*[1 1];
 
 % Controle Proporcional com Feedforward
-r0 = 1;
-x0 = [0 0]';
-K0 = place(A, B, [-5 -6]);
+r0 = (rgo*Cwro4 - Cwpg4) - (rgo*Cwro3 - Cwpg3)*(Cwro4 - Cwpo4)/(Cwro3 - Cwpo3); %baseando-se em C, ou seja uma mudanca de aproximadamente 100%
+x0 = [-12 4]';
+K0 = place(A, B, [-1 -0.002]);
 N0 = 1/(C*inv(-1*(A - B*K0))*B);
