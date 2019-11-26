@@ -1,8 +1,8 @@
 % Parametros Simulacao
 
-passo=1;
 Tsimu=100e3;
-h=0.1;
+p = 0.1;
+h = 1;
 
 % Parametros Planta
 
@@ -47,5 +47,7 @@ C = g/Aw*[1 1];
 % Controle Proporcional com Feedforward
 r0 = (rgo*Cwro4 - Cwpg4) - (rgo*Cwro3 - Cwpg3)*(Cwro4 - Cwpo4)/(Cwro3 - Cwpo3); %baseando-se em C, ou seja uma mudanca de aproximadamente 100%
 x0 = [-12 4]';
+f0 = 1/1000;
+a0 = r0; %Nao demonstrou alterar o erro percentual
 K0 = place(A, B, [-1 -0.002]);
 N0 = 1/(C*inv(-1*(A - B*K0))*B);
