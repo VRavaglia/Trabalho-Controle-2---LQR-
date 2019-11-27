@@ -45,9 +45,50 @@ B = [1 0]';
 C = g/Aw*[1 1];
 
 % Controle Proporcional com Feedforward
-r0 = (rgo*Cwro4 - Cwpg4) - (rgo*Cwro3 - Cwpg3)*(Cwro4 - Cwpo4)/(Cwro3 - Cwpo3); %baseando-se em C, ou seja uma mudanca de aproximadamente 100%
-x0 = [-12 4]';
-f0 = 1/1000;
+r0 = (rgo*Cwro4 - Cwpg4) - (rgo*Cwro3 - Cwpg3)*(Cwro4 - Cwpo4)/(Cwro3 - Cwpo3); %baseando-se em C (nao eh o do espaco de estados)
+x0 = [-12 4]*0';
+f0 = 1/1000*2;
 a0 = r0; %Nao demonstrou alterar o erro percentual
 K0 = place(A, B, [-1 -0.002]);
 N0 = 1/(C*inv(-1*(A - B*K0))*B);
+
+
+%% LQR
+
+%Planta discreta
+[b,a] = ss2tf(A,B,C,0);
+func_transferencia = tf(b, a);
+Gd = c2d(func_transferencia, h, 'zoh');
+[num, den] = tfdata(Gd, 'v');
+[phi, gama, Cd, Dd] = tf2ss(num, den);
+
+%Inicializando Q, S e L
+Q1 = [ 1 0 ; 0 1]*1;
+Q12 = [ 0 ; 0];
+Q2 = 1;
+Q = [Q1 Q12 ; Q12' Q2];
+q0 = eye(length(phi));
+N = 100;
+s = cell(1,N+1);
+l = cell(1,N);
+
+% Inicializando Vetores
+s{N+1} = q0;
+j = 0;
+
+% S e L pelo Riccati com Loop
+for k = N:-1:1
+    s{k} = phi'*s{k + 1}*phi + Q1 - (phi'*s{k + 1}*gama + Q12)*(gama'*s{k + 1}*gama + Q2)^(-1)*(gama'*s{k + 1}*phi + Q12');
+    l{k} = (Q2 + gama'*s{k + 1}*gama)^(-1)*(gama'*s{k + 1}*phi - Q12'); % tinha um transposto a mais
+    aux = reshape(s{k}, [], 1);
+    sx(:, k) = aux;
+    aux = reshape(l{k}, [], 1);
+    lx(:, k) = aux;
+end
+
+%Revertendo a ordem
+sx(:,:) = sx(:,end:-1:1);
+lx(:,:) = lx(:,end:-1:1);
+
+% Riccati estatico
+[H, S, e] = dlqr(phi, gama, Q1, Q2, Q12);
