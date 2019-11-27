@@ -1,8 +1,8 @@
 % Parametros Simulacao
 
-Tsimu=100e3;
-p = 0.1;
-h = 1;
+Tsimu=10e3;
+p = 1;
+h = 50;
 
 % Parametros Planta
 
@@ -37,6 +37,7 @@ Cwpg2 = 0.3158;
 Cwpg3 = -0.0249;
 Cwpg4 = 0;
 rgo = 0.08181818;
+Cte = (rgo*Cwro4 - Cwpg4) - (rgo*Cwpg3 - Cwpg3)*(Cwro4 - Cwpo4)/(Cwro3 - Cwpo3);
 
 % Espaco de estados
 
@@ -45,11 +46,11 @@ B = [1 0]';
 C = g/Aw*[1 1];
 
 % Controle Proporcional com Feedforward
-r0 = (rgo*Cwro4 - Cwpg4) - (rgo*Cwro3 - Cwpg3)*(Cwro4 - Cwpo4)/(Cwro3 - Cwpo3); %baseando-se em C (nao eh o do espaco de estados)
-x0 = [-12 4]';
-f0 = 1/1000*2;
+r0 = 20*101325; %baseando-se em C (nao eh o do espaco de estados)
+x0 = [12000 80000]';
+f0 = 62.8;
 a0 = r0; %Nao demonstrou alterar o erro percentual
-K0 = place(A, B, [-1 -0.002]);
+K0 = place(A, B, [-0.5 -0.005]);
 N0 = 1/(C*inv(-1*(A - B*K0))*B);
 
 
@@ -65,9 +66,9 @@ Gd = c2d(func_transferencia, h, 'zoh');
 %Inicializando Q, S e L
 Q1 = [ 1 0 ; 0 1];
 Q12 = [ 0 ; 0];
-Q2 = 10;
+Q2 = 1e6;
 Q = [Q1 Q12 ; Q12' Q2];
-q0 = eye(length(phi))*100;
+q0 = eye(length(phi));
 N = 100;
 s = cell(1,N+1);
 l = cell(1,N);
@@ -96,8 +97,13 @@ NLQR = 1/(C*inv(-1*(A - B*H))*B);
 
 
 %% Observadores
-xHatInit = (randn(2)*[1 0]');
+xHatInit = x0 + (randn(2)*[1 0]')*10e3;
 [pz,z] = pzmap(func_transferencia);
-Lp = 20*pz;
+Lp = 2*pz;
 L = (place(A',C',Lp))';
-vk = r0/10;
+vk = r0*1000;
+
+x0hat = xHatInit;
+G = eye(2);
+Qn = vk*eye(2);
+P0 = eye(2)*400^2;
