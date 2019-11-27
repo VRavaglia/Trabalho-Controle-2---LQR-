@@ -38,11 +38,11 @@ Gd = c2d(func_transferencia, h, 'zoh');% metodo ZOH de discretizacao
 % Q2 = [1]
 Q1 = [ 1 0 ; 0 1]*10;
 Q12 = [ 0 ; 0];
-Q2 = [1];
-Q = [Q1 Q12 ; Q12' Q2]; % Q agora é 3x3
+Q2 = 1;
+Q = [Q1 Q12 ; Q12' Q2];
 q0 = eye(length(phi));
 N = 100;
-s = cell(1,N+1);% troquei os zeros por celulas
+s = cell(1,N+1);
 l = cell(1,N);
 
 riccati1;
