@@ -63,11 +63,11 @@ Gd = c2d(func_transferencia, h, 'zoh');
 [phi, gama, Cd, Dd] = tf2ss(num, den);
 
 %Inicializando Q, S e L
-Q1 = [ 1 0 ; 0 1];
+Q1 = [ 1 0 ; 0 1]*100000;
 Q12 = [ 0 ; 0];
 Q2 = 10;
 Q = [Q1 Q12 ; Q12' Q2];
-q0 = eye(length(phi))*100;
+q0 = eye(length(phi));
 N = 100;
 s = cell(1,N+1);
 l = cell(1,N);
@@ -93,11 +93,3 @@ lx(:,:) = lx(:,end:-1:1);
 % Riccati estatico
 [H, S, e] = dlqr(phi, gama, Q1, Q2, Q12);
 NLQR = 1/(C*inv(-1*(A - B*H))*B);
-
-
-%% Observadores
-xHatInit = (randn(2)*[1 0]');
-[pz,z] = pzmap(func_transferencia);
-Lp = 20*pz;
-L = (place(A',C',Lp))';
-vk = r0/10;
