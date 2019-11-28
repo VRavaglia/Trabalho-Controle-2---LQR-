@@ -46,11 +46,11 @@ B = [1 0]';
 C = g/Aw*[1 1];
 
 % Controle Proporcional com Feedforward
-r0 = 20*101325; %baseando-se em C (nao eh o do espaco de estados)
-x0 = [12000 80000]';
-f0 = 62.8;
+r0 = g/Aw*(12e3 + 76e3);
+x0 = [5e4 5e4]'*1;
+f0 = 62.8/20*2;
 a0 = r0; %Nao demonstrou alterar o erro percentual
-K0 = place(A, B, [-0.5 -0.005]);
+K0 = place(A, B, [-0.5 -0.001]);
 N0 = 1/(C*inv(-1*(A - B*K0))*B);
 
 
@@ -64,11 +64,11 @@ Gd = c2d(func_transferencia, h, 'zoh');
 [phi, gama, Cd, Dd] = tf2ss(num, den);
 
 %Inicializando Q, S e L
-Q1 = [ 1 0 ; 0 1];
+Q1 = [ 1 0 ; 0 1]*1;
 Q12 = [ 0 ; 0];
-Q2 = 1e6;
+Q2 = 1000;
 Q = [Q1 Q12 ; Q12' Q2];
-q0 = eye(length(phi));
+q0 = [ 100 0 ; 0 1]*10;
 N = 100;
 s = cell(1,N+1);
 l = cell(1,N);
@@ -101,9 +101,10 @@ xHatInit = x0 + (randn(2)*[1 0]')*10e3;
 [pz,z] = pzmap(func_transferencia);
 Lp = 2*pz;
 L = (place(A',C',Lp))';
-vk = r0*1000;
+vk = r0*1000000;
 
-x0hat = xHatInit;
+x0hat = x0;
 G = eye(2);
-Qn = vk*eye(2);
-P0 = eye(2)*400^2;
+Qn =eye(2)*10e10;
+P0 = eye(2)*10e3;
+R = 10;

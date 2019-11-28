@@ -2,20 +2,25 @@
 
 %% Controle Proporcional degrau
 close all;
-plot(saida, 'LineWidth', 2)
+hold on
+plot(referenciacontinuo, 'LineWidth', 2)
+plot(plantoutputcontinuo, 'LineWidth', 2)
+hold off
 xlim([0 Tsimu])
-title("Respota a Degrau e Estabilizaï¿½ï¿½o")
+title("Respota a Degrau e Estabilização")
 grid on;
-ylabel('Saida (...)');
+ylabel('Saida (Pa)');
 xlabel('Tempo (s)');
 
 legend({'Entrada', 'Saida'}, 'Location','southeast');
 print('proporcional_step_saida','-depsc','-tiff')
-
-close all;
-plot(estados, 'LineWidth', 2)
+%% Estados
+ec = zeros(Tsimu + 1,2);
+ec(:,1) = estadoscontinuo(1,1,:);
+ec(:,2) = estadoscontinuo(2,1,:);
+plot(ec, 'LineWidth', 2)
 xlim([0 Tsimu])
-title("Respota a Degrau e Estabilizaï¿½ï¿½o")
+title("Respota a Degrau e Estabilização")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
@@ -26,20 +31,27 @@ print('proporcional_step_estados','-depsc','-tiff')
 
 %% Controle Proporcional senoide
 close all;
-plot(saida, 'LineWidth', 2)
+hold on
+t = 1:Tsimu;
+plot(a0*sin(f0*t/h/6.28/5 - pi), 'LineWidth', 2)
+plot(plantoutputcontinuo, 'LineWidth', 2)
+hold off
 xlim([0 Tsimu])
-title("Respota a Senoide e Estabilizaï¿½ï¿½o")
+title("Respota a Senoide e Estabilização")
 grid on;
-ylabel('Saida (...)');
+ylabel('Saida (Pa)');
 xlabel('Tempo (s)');
 
 legend({'Entrada', 'Saida'}, 'Location','southeast');
 print('proporcional_sin_saida','-depsc','-tiff')
-
+%% Estados
 close all;
-plot(estados, 'LineWidth', 2)
+ec = zeros(Tsimu + 1,2);
+ec(:,1) = estadoscontinuo(1,1,:);
+ec(:,2) = estadoscontinuo(2,1,:);
+plot(ec, 'LineWidth', 2)
 xlim([0 Tsimu])
-title("Respota a Senoide e Estabilizaï¿½ï¿½o")
+title("Respota a Senoide e Estabilização")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
@@ -64,13 +76,11 @@ p(1).LineWidth = 0.1;
 p(2).LineWidth = 0.1;
 grid on
 xlim([0 Tsimu])
-title("Respota a Senoide e Estabilizaï¿½ï¿½o")
+title("Respota a Senoide e Estabilização")
 grid on;
-ylabel('Saï¿½da (...)');
+ylabel('Saída (Pa)');
 xlabel('Tempo (s)');
 print('discreto_sin_saida_2f0','-depsc','-tiff')
-xlim([100 10000])
-print('discreto_sin_saida_zoom_2f0','-depsc','-tiff')
 
 %% Controle Proporcional Discreto Degrau
 
@@ -88,34 +98,34 @@ p = plot(t,referenciadiscreto,'-',t,yd, '.');
 %p(2).LineWidth = 0.1;
 grid on
 %xlim([0 Tsimu])
-title("Respota a Degrau e Estabilizaï¿½ï¿½o")
+legend({'Entrada', 'Saida'}, 'Location','southeast');
+title("Respota a Degrau e Estabilização")
 grid on;
-ylabel('Saï¿½da (...)');
+ylabel('Saída (Pa)');
 xlabel('Tempo (s)');
-print('discreto_degrau_saida_h0','-depsc','-tiff')
-xlim([Tsimu/2-100 Tsimu/2+3000])
-print('discreto_degrau_saida_zoom_h0','-depsc','-tiff')
+print('discreto_degrau_saida_h010','-depsc','-tiff')
 
 %% Riccati
 
 aux = size(sx);
 hold on;
-title("Soluï¿½ï¿½o de Riccati")
+title("Solução de Riccati")
 grid on;
 j = 1;
 for k = 1:aux(1)
     plot(sx(k,:),'-', 'LineWidth', 2);
-    legenda(j) = "Dinï¿½mico";
+    legenda(j) = "Dinâmico";
     j = j+1;
 end
 for k = 1:aux(1)
     plot(S(k)*ones(aux(2)), '--', 'LineWidth', 2);
-    legenda(j) = "Estï¿½tico";
+    legenda(j) = "Estático";
     j = j+1;
 end
 legend(legenda)
 print('ganhoS','-depsc','-tiff')
 hold off;
+
 
 close
 aux = size(lx);
@@ -125,35 +135,36 @@ grid on;
 j = 1;
 for k = 1:aux(1)
     plot(lx(k,:),'-', 'LineWidth', 2);
-    legenda(j) = "Dinï¿½mico";
+    legenda2(j) = "Dinâmico";
     j = j+1;
 end
 for k = 1:aux(1)
     plot(H(k)*ones(aux(2)), '--', 'LineWidth', 2);
-    legenda(j) = "Estï¿½tico";
+    legenda2(j) = "Estático";
     j = j+1;
 end
-legend(legenda)
+legend(legenda2)
 print('ganhoH','-depsc','-tiff')
 hold off;
-close
+%close
 
 %% Deadbeat
 
 close all;
 
-tc=tempocontinuo;
-uc=plantinputcontinuo;
-yc=plantoutputcontinuo;
-yd=plantoutputdiscreto;
-t=tempodiscreto;
+ec = zeros(Tsimu + 1,2);
+ec(:,1) = estadoscontinuo(1,1,:);
+ec(:,2) = estadoscontinuo(2,1,:);
 
-u=controlediscreto;
+ed = zeros(Tsimu/h + 1,2);
+ed(:,1) = estadosdiscreto(1,1,:);
+ed(:,2) = estadosdiscreto(2,1,:);
+
 hold on
-p = plot(estadoscontinuo, '.');
-plot(estadosdiscreto, 'o');
+plot(ec, '.');
+plot(tempodiscreto, ed, 'o');
 hold off
-xlim([0 300])
+xlim([0 Tsimu])
 %p(1).LineWidth = 0.1;
 %p(2).LineWidth = 0.1;
 grid on
@@ -179,37 +190,38 @@ for k = 1:aux(1)
     j = j+1;
 end
 %legend(legenda)
+
+xlim([1 10])
 print('ganho_deadbeat','-depsc','-tiff')
-xlim([0 10])
 hold off;
 %close
 
-%% Comparacao LQR Estados
+%% Comparacao LQR Transitorio
 
 
 close all;
 
-tc=tempocontinuo;
-uc=plantinputcontinuo;
-yc=plantoutputcontinuo;
-yd=plantoutputdiscreto;
-t=tempodiscreto;
+%eprop = plantoutputcontinuo;
+elqr = plantoutputcontinuo;
 
-u=controlediscreto;
+% elqr = zeros(Tsimu + 1,2);
+% elqr(:,1) = estadoscontinuo(1,1,:);
+% elqr(:,2) = estadoscontinuo(2,1,:);
+
 hold on
-p = plot(eprop);
+plot(eprop);
 plot(elqr, '--');
 hold off
-xlim([0 500])
+xlim([1 Tsimu])
 %p(1).LineWidth = 0.1;
 %p(2).LineWidth = 0.1;
 grid on
-%xlim([0 Tsimu])
-title("ComparaÃ§Ã£o Estados")
+xlim([0 1000])
+title("Comparação Entre Estados")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
-legend('Proporcional','Proporcional', 'LQR', 'LQR')
+legend('Proporcional', 'LQR')
 print('comparacao_lqr_estados','-depsc','-tiff')
 %xlim([Tsimu/2-100 Tsimu/2+3000])
 
@@ -218,25 +230,84 @@ print('comparacao_lqr_estados','-depsc','-tiff')
 
 close all;
 
-tc=tempocontinuo;
-uc=plantinputcontinuo;
-yc=plantoutputcontinuo;
-yd=plantoutputdiscreto;
-t=tempodiscreto;
+%cprop = zeros(Tsimu/h + 1,1);
+%cprop(:,1) = controlediscreto(1,1,:);
 
-u=controlediscreto;
+%clqr = zeros(Tsimu/h + 1,1);
+%clqr(:,1) = controlediscreto(1,1,:);
+
+
+
 hold on
-p = plot(cprop);
-plot(clqr);
+p = plot(tempodiscreto(:,1), cprop, 'LineWidth', 2);
+plot(tempodiscreto, clqr, 'LineWidth', 2);
 hold off
-xlim([0 300])
+xlim([0 5000])
 %p(1).LineWidth = 0.1;
 %p(2).LineWidth = 0.1;
 grid on
 %xlim([0 Tsimu])
-title("Controle")
+title("Comparação Entre o Controle LQR e Proporcional")
 grid on;
-ylabel('Controle (..)');
+ylabel('Controle');
 xlabel('Tempo (s)');
 legend('Proporcional','LQR')
 print('comparacao_lqr_controle','-depsc','-tiff')
+ylim([-500 500])
+xlim([0 1000])
+print('comparacao_lqr_controle_zoom','-depsc','-tiff')
+
+%% Observador
+plot(Observador, 'LineWidth', 2);
+title("Observação dos Estados")
+grid on;
+ylabel('Estados (Kg)');
+xlabel('Tempo (s)');
+legend('Planta','Planta','Observador','Observador')
+print('observador_luenberger','-depsc','-tiff')
+
+%% Obs Resp Degrau proporcional
+
+close all;
+hold on
+plot(referenciacontinuo, 'LineWidth', 2)
+plot(plantoutputcontinuo, 'LineWidth', 2)
+hold off
+xlim([0 Tsimu])
+title("Respota a Degrau e Estabilização Controle Proporcional")
+grid on;
+ylabel('Saida (Pa)');
+xlabel('Tempo (s)');
+
+legend({'Entrada', 'Saida'}, 'Location','southeast');
+print('observador_step_proporcional','-depsc','-tiff')
+
+%% Obs Resp Degrau lqr
+
+close all;
+hold on
+plot(referenciacontinuo, 'LineWidth', 2)
+plot(plantoutputcontinuo, 'LineWidth', 2)
+hold off
+xlim([0 Tsimu])
+title("Respota a Degrau e Estabilização Controle Proporcional")
+grid on;
+ylabel('Saida (Pa)');
+xlabel('Tempo (s)');
+
+legend({'Entrada', 'Saida'}, 'Location','southeast');
+print('observador_step_lqr','-depsc','-tiff')
+
+%% Kalman
+
+plot(Kalman, 'LineWidth', 2);
+title("Observação dos Estados")
+grid on;
+ylabel('Estados (Kg)');
+xlabel('Tempo (s)');
+legend('Planta','Planta','Observador','Observador')
+print('observador_kalman','-depsc','-tiff')
+
+
+
+
