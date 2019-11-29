@@ -7,7 +7,7 @@ plot(referenciacontinuo, 'LineWidth', 2)
 plot(plantoutputcontinuo, 'LineWidth', 2)
 hold off
 xlim([0 Tsimu])
-title("Respota a Degrau e Estabilização")
+title("Respota a Degrau e Estabilizaï¿½ï¿½o")
 grid on;
 ylabel('Saida (Pa)');
 xlabel('Tempo (s)');
@@ -20,7 +20,7 @@ ec(:,1) = estadoscontinuo(1,1,:);
 ec(:,2) = estadoscontinuo(2,1,:);
 plot(ec, 'LineWidth', 2)
 xlim([0 Tsimu])
-title("Respota a Degrau e Estabilização")
+title("Respota a Degrau e Estabilizaï¿½ï¿½o")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
@@ -37,7 +37,7 @@ plot(a0*sin(f0*t/h/6.28/5 - pi), 'LineWidth', 2)
 plot(plantoutputcontinuo, 'LineWidth', 2)
 hold off
 xlim([0 Tsimu])
-title("Respota a Senoide e Estabilização")
+title("Respota a Senoide e Estabilizaï¿½ï¿½o")
 grid on;
 ylabel('Saida (Pa)');
 xlabel('Tempo (s)');
@@ -51,7 +51,7 @@ ec(:,1) = estadoscontinuo(1,1,:);
 ec(:,2) = estadoscontinuo(2,1,:);
 plot(ec, 'LineWidth', 2)
 xlim([0 Tsimu])
-title("Respota a Senoide e Estabilização")
+title("Respota a Senoide e Estabilizaï¿½ï¿½o")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
@@ -76,9 +76,9 @@ p(1).LineWidth = 0.1;
 p(2).LineWidth = 0.1;
 grid on
 xlim([0 Tsimu])
-title("Respota a Senoide e Estabilização")
+title("Respota a Senoide e Estabilizaï¿½ï¿½o")
 grid on;
-ylabel('Saída (Pa)');
+ylabel('Saï¿½da (Pa)');
 xlabel('Tempo (s)');
 print('discreto_sin_saida_2f0','-depsc','-tiff')
 
@@ -99,9 +99,9 @@ p = plot(t,referenciadiscreto,'-',t,yd, '.');
 grid on
 %xlim([0 Tsimu])
 legend({'Entrada', 'Saida'}, 'Location','southeast');
-title("Respota a Degrau e Estabilização")
+title("Respota a Degrau e Estabilizaï¿½ï¿½o")
 grid on;
-ylabel('Saída (Pa)');
+ylabel('Saï¿½da (Pa)');
 xlabel('Tempo (s)');
 print('discreto_degrau_saida_h010','-depsc','-tiff')
 
@@ -109,17 +109,17 @@ print('discreto_degrau_saida_h010','-depsc','-tiff')
 
 aux = size(sx);
 hold on;
-title("Solução de Riccati")
+title("Soluï¿½ï¿½o de Riccati")
 grid on;
 j = 1;
 for k = 1:aux(1)
     plot(sx(k,:),'-', 'LineWidth', 2);
-    legenda(j) = "Dinâmico";
+    legenda(j) = "Dinï¿½mico";
     j = j+1;
 end
 for k = 1:aux(1)
     plot(S(k)*ones(aux(2)), '--', 'LineWidth', 2);
-    legenda(j) = "Estático";
+    legenda(j) = "Estï¿½tico";
     j = j+1;
 end
 legend(legenda)
@@ -135,12 +135,12 @@ grid on;
 j = 1;
 for k = 1:aux(1)
     plot(lx(k,:),'-', 'LineWidth', 2);
-    legenda2(j) = "Dinâmico";
+    legenda2(j) = "Dinï¿½mico";
     j = j+1;
 end
 for k = 1:aux(1)
     plot(H(k)*ones(aux(2)), '--', 'LineWidth', 2);
-    legenda2(j) = "Estático";
+    legenda2(j) = "Estï¿½tico";
     j = j+1;
 end
 legend(legenda2)
@@ -217,7 +217,7 @@ xlim([1 Tsimu])
 %p(2).LineWidth = 0.1;
 grid on
 xlim([0 1000])
-title("Comparação Entre Estados")
+title("Comparaï¿½ï¿½o Entre Estados")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
@@ -247,7 +247,7 @@ xlim([0 5000])
 %p(2).LineWidth = 0.1;
 grid on
 %xlim([0 Tsimu])
-title("Comparação Entre o Controle LQR e Proporcional")
+title("Comparaï¿½ï¿½o Entre o Controle LQR e Proporcional")
 grid on;
 ylabel('Controle');
 xlabel('Tempo (s)');
@@ -259,7 +259,7 @@ print('comparacao_lqr_controle_zoom','-depsc','-tiff')
 
 %% Observador
 plot(Observador, 'LineWidth', 2);
-title("Observação dos Estados")
+title("Observaï¿½ï¿½o dos Estados")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
@@ -274,7 +274,7 @@ plot(referenciacontinuo, 'LineWidth', 2)
 plot(plantoutputcontinuo, 'LineWidth', 2)
 hold off
 xlim([0 Tsimu])
-title("Respota a Degrau e Estabilização Controle Proporcional")
+title("Respota a Degrau e Estabilizaï¿½ï¿½o Controle Proporcional")
 grid on;
 ylabel('Saida (Pa)');
 xlabel('Tempo (s)');
@@ -290,7 +290,7 @@ plot(referenciacontinuo, 'LineWidth', 2)
 plot(plantoutputcontinuo, 'LineWidth', 2)
 hold off
 xlim([0 Tsimu])
-title("Respota a Degrau e Estabilização Controle Proporcional")
+title("Respota a Degrau e Estabilizaï¿½ï¿½o Controle Proporcional")
 grid on;
 ylabel('Saida (Pa)');
 xlabel('Tempo (s)');
@@ -301,13 +301,21 @@ print('observador_step_lqr','-depsc','-tiff')
 %% Kalman
 
 plot(Kalman, 'LineWidth', 2);
-title("Observação dos Estados")
+title("Observaï¿½ï¿½o dos Estados")
 grid on;
 ylabel('Estados (Kg)');
 xlabel('Tempo (s)');
 legend('Planta','Planta','Observador','Observador')
 print('observador_kalman','-depsc','-tiff')
 
+%% Controle
 
+plot(tempodiscreto, controle, 'LineWidth', 2);
+title("Controle LQR")
+grid on;
+ylabel('Controle (Kg/s)');
+xlabel('Tempo (s)');
+%legend('Planta','Planta','Observador','Observador')
+print('controle_lqr','-depsc','-tiff')
 
 

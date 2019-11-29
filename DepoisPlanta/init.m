@@ -66,7 +66,7 @@ Gd = c2d(func_transferencia, h, 'zoh');
 %Inicializando Q, S e L
 Q1 = [ 1 0 ; 0 1]*1;
 Q12 = [ 0 ; 0];
-Q2 = 1000;
+Q2 = 1e7;
 Q = [Q1 Q12 ; Q12' Q2];
 q0 = [ 100 0 ; 0 1]*10;
 N = 100;
